@@ -1,0 +1,9 @@
+table {
+  width: 100%;
+}
+
+.action-add-button{
+  position: absolute;
+  right: 45px;
+  top: calc(100vh - 75px);
+}

@@ -1,0 +1,71 @@
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+  <ng-container matColumnDef="id">
+    <th mat-header-cell *matHeaderCellDef> # </th>
+    <td mat-cell *matCellDef="let employee"> {{employee.id}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="firstname">
+    <th mat-header-cell *matHeaderCellDef> Firstname </th>
+    <td mat-cell *matCellDef="let employee">
+      <span *ngIf="employee !== editedEmployee"> {{employee.firstname}} </span>
+      <mat-form-field *ngIf="employee === editedEmployee" floatLabel="never">
+        <input matInput placeholder="Firstname" [(ngModel)]="editedEmployee.firstname">
+      </mat-form-field>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="lastname">
+    <th mat-header-cell *matHeaderCellDef> Lastname </th>
+    <td mat-cell *matCellDef="let employee">
+      <span *ngIf="employee !== editedEmployee"> {{employee.lastname}} </span>
+      <mat-form-field *ngIf="employee === editedEmployee" floatLabel="never">
+        <input matInput placeholder="Lastname" [(ngModel)]="editedEmployee.lastname">
+      </mat-form-field>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="position">
+    <th mat-header-cell *matHeaderCellDef> Position </th>
+    <td mat-cell *matCellDef="let employee">
+      <span *ngIf="employee !== editedEmployee"> {{employee.position.name}} </span>
+
+      <mat-form-field *ngIf="employee === editedEmployee" floatLabel="never">
+        <mat-select placeholder="Position" [(ngModel)]="editedEmployee.position">
+          <mat-option *ngFor="let position of workPositions" [value]="position">
+            {{position.name}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="dateOfBirth">
+    <th mat-header-cell *matHeaderCellDef> Date of birth </th>
+    <td mat-cell *matCellDef="let employee">
+      <span *ngIf="employee !== editedEmployee"> {{employee.dateOfBirth | date:'d.M.yy' }} </span>
+      <mat-form-field *ngIf="employee === editedEmployee" floatLabel="never">
+        <input matInput [matDatepicker]="dateOfBirthDatepicker" placeholder="Date of birth" [(ngModel)]="editedEmployee.dateOfBirth">
+        <mat-datepicker-toggle matSuffix [for]="dateOfBirthDatepicker"></mat-datepicker-toggle>
+        <mat-datepicker #dateOfBirthDatepicker></mat-datepicker>
+      </mat-form-field>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="actions">
+    <th mat-header-cell *matHeaderCellDef> Action </th>
+    <td mat-cell *matCellDef="let employee">
+      <button mat-mini-fab *ngIf="editedEmployee === null" (click)="startEdit(employee)"><mat-icon aria-label="Edit">edit</mat-icon></button>
+      <button mat-mini-fab *ngIf="employee === editedEmployee" (click)="confirmEdit()"><mat-icon aria-label="Save">save</mat-icon></button>
+
+      <button mat-mini-fab *ngIf="editedEmployee === null" (click)="delete()"><mat-icon aria-label="Delete">delete</mat-icon></button>
+      <button mat-mini-fab *ngIf="employee === editedEmployee" (click)="discardChanges()"><mat-icon aria-label="Discard changes">clear</mat-icon></button>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumnsKeys"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumnsKeys;"></tr>
+</table>
+
+<button mat-mini-fab [disabled]="editedEmployee !== null" class="action-add-button" (click)="add()"><mat-icon aria-label="Add">add</mat-icon></button>
+
+
